@@ -2,6 +2,7 @@ package im.juniq.telegram_handler;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import org.junit.jupiter.api.Test;
 
@@ -20,20 +21,28 @@ class TelegramHandlerTest {
     }
 
     @Test
-    void 전문_특정필드_가져오기() {
+    void 특정필드_가져오기() {
         TelegramHandler telegramHandler = new TelegramHandler("12345testname");
         assertThat(telegramHandler.field(1, 5)).isEqualTo("12345");
     }
 
     @Test
-    void 전문_특정필드_가져오기2() {
+    void 특정필드_가져오기2() {
         TelegramHandler telegramHandler = new TelegramHandler("12345testname");
         assertThat(telegramHandler.field(6, 13)).isEqualTo("testname");
     }
 
     @Test
-    void 전문_특정필드_가져올때_예외() {
+    void 특정필드_가져올때_전문길이_예외() {
         TelegramHandler telegramHandler = new TelegramHandler("12345testname");
-        assertThat(telegramHandler.field(1, 5)).isEqualTo("12345");
+        assertThatThrownBy(() -> telegramHandler.field(6, 14)).isInstanceOf(RuntimeException.class)
+            .hasMessage("전문길이와 index가 맞지 않습니다. telegram length: 13, bedinIndex: 6, endIndex: 14");
+    }
+
+    @Test
+    void 특정필드_가져올때_전문길이_예외2() {
+        TelegramHandler telegramHandler = new TelegramHandler("12345testname");
+        assertThatThrownBy(() -> telegramHandler.field(0, 14)).isInstanceOf(RuntimeException.class)
+            .hasMessage("beginIndex는 0보다 커야합니다. telegram length: 13, bedinIndex: 0, endIndex: 14");
     }
 }
