@@ -8,7 +8,7 @@ public class TelegramHandler {
     }
 
     public String get(int beginIndex, int endIndex) {
-        return telegram.substring(beginIndex, endIndex);
+        return telegram.substring(beginIndex - 1, endIndex);
     }
 
     public int length() {
