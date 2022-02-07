@@ -12,9 +12,11 @@ class TelegramHandlerTest {
     }
 
     @Test
-    void 전문길이_조회() {
+    void 전문길이_비교() {
         TelegramHandler telegramHandler = new TelegramHandler("12345testname");
-        assertThat(telegramHandler.length()).isEqualTo(13);
+        assertThat(telegramHandler.isLengthOf(13)).isEqualTo(0);
+        assertThat(telegramHandler.isLengthOf(14)).isEqualTo(1);
+        assertThat(telegramHandler.isLengthOf(12)).isEqualTo(-1);
     }
 
     @Test

@@ -14,4 +14,8 @@ public class TelegramHandler {
     public int length() {
         return telegram.length();
     }
+
+    public int isLengthOf(int length) {
+        return Integer.compare(length, telegram.length());
+    }
 }
