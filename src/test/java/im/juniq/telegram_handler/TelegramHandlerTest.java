@@ -45,4 +45,32 @@ class TelegramHandlerTest {
         assertThatThrownBy(() -> telegramHandler.field(0, 14)).isInstanceOf(RuntimeException.class)
             .hasMessage("beginIndex는 0보다 커야합니다. telegram length: 13, bedinIndex: 0, endIndex: 14");
     }
+
+    @Test
+    void 특정필드_값_바꾸기() {
+        TelegramHandler telegramHandler = new TelegramHandler("12345testname");
+
+        telegramHandler.changeField(1, 5, "54321");
+
+        assertThat(telegramHandler.field(1, 5)).isEqualTo("54321");
+        assertThat(telegramHandler.field(6, 13)).isEqualTo("testname");
+    }
+
+    @Test
+    void 특정필드_값_바꾸기2() {
+        TelegramHandler telegramHandler = new TelegramHandler("12345testname");
+
+        telegramHandler.changeField(6, 9, "eeee");
+
+        assertThat(telegramHandler.field(1, 5)).isEqualTo("12345");
+        assertThat(telegramHandler.field(6, 13)).isEqualTo("eeeename");
+    }
+
+    @Test
+    void 특정필드_값_바꾸기_필드길이_예외() {
+        TelegramHandler telegramHandler = new TelegramHandler("12345testname");
+
+        assertThatThrownBy(() -> telegramHandler.changeField(1, 5, "5432")).isInstanceOf(RuntimeException.class)
+            .hasMessage("새로운 필드의 길이는 이전 필드의 길이와 같아야 합니다.");
+    }
 }

@@ -22,4 +22,14 @@ public class TelegramHandler {
     public int isLengthOf(int length) {
         return Integer.compare(length, telegram.length());
     }
+
+    public void changeField(int beginIndex, int endIndex, String newField) {
+        if (endIndex - beginIndex != newField.length() - 1) {
+            throw new RuntimeException("새로운 필드의 길이는 이전 필드의 길이와 같아야 합니다.");
+        }
+        StringBuilder builder = new StringBuilder(telegram);
+        builder.delete(beginIndex - 1, endIndex);
+        builder.insert(beginIndex - 1, newField);
+        telegram = builder.toString();
+    }
 }
