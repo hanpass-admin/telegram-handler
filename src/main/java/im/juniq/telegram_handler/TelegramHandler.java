@@ -7,12 +7,8 @@ public class TelegramHandler {
         this.telegram = telegram;
     }
 
-    public String get(int beginIndex, int endIndex) {
+    public String field(int beginIndex, int endIndex) {
         return telegram.substring(beginIndex - 1, endIndex);
-    }
-
-    public int length() {
-        return telegram.length();
     }
 
     public int isLengthOf(int length) {
