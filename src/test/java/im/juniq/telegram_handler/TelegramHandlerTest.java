@@ -77,6 +77,8 @@ class TelegramHandlerTest {
             .hasMessage("endIndex가 전문길이보다 큽니다. telegram length: 21, bedinIndex: 6, endIndex: 22");
         assertThatThrownBy(() -> telegramHandler.field(0, 22)).isInstanceOf(RuntimeException.class)
             .hasMessage("beginIndex는 0보다 커야합니다. telegram length: 21, bedinIndex: 0, endIndex: 22");
+        assertThatThrownBy(() -> telegramHandler.field(2, 1)).isInstanceOf(RuntimeException.class)
+            .hasMessage("endIndex는 beginIndex보다 커야합니다. telegram length: 21, bedinIndex: 2, endIndex: 1");
     }
 
     @Test

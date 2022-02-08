@@ -30,6 +30,10 @@ public class TelegramHandler {
             throw new RuntimeException("endIndex가 전문길이보다 큽니다. telegram length: " + telegram.length + ", bedinIndex: " + beginIndex + ", endIndex: " + endIndex);
         }
 
+        if (beginIndex > endIndex) {
+            throw new RuntimeException("endIndex는 beginIndex보다 커야합니다. telegram length: " + telegram.length + ", bedinIndex: " + beginIndex + ", endIndex: " + endIndex);
+        }
+
         try {
             return new String(extractByte(beginIndex, endIndex), charset);
         } catch (StringIndexOutOfBoundsException e) {
