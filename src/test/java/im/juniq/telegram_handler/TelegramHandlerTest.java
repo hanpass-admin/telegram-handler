@@ -8,43 +8,29 @@ import java.nio.charset.Charset;
 import org.junit.jupiter.api.Test;
 
 class TelegramHandlerTest {
-    public static final String TEST_TELEGRAM = "12345testname";
-    public static final String TEST_TELEGRAM_WITH_KOREAN = "12345testname  한글";
+    public static final String TEST_TELEGRAM_WITH_KOREAN = "12345testname  한글 321";
 
     @Test
     void 전문핸들러_생성() {
-        assertThatCode(() -> new TelegramHandler(TEST_TELEGRAM)).doesNotThrowAnyException();
+        assertThatCode(() -> new TelegramHandler(TEST_TELEGRAM_WITH_KOREAN)).doesNotThrowAnyException();
     }
 
     @Test
-    void 전문길이_비교() {
-        TelegramHandler telegramHandler = new TelegramHandler(TEST_TELEGRAM);
+    void 전문길이_비교_UTF8() {
+        TelegramHandler telegramHandler = new TelegramHandler(TEST_TELEGRAM_WITH_KOREAN);
 
-        assertThat(telegramHandler.isLengthOf(13)).isEqualTo(0);
-        assertThat(telegramHandler.isLengthOf(14)).isEqualTo(1);
-        assertThat(telegramHandler.isLengthOf(12)).isEqualTo(-1);
-
-        TelegramHandler koreanTelegramHandler = new TelegramHandler(TEST_TELEGRAM_WITH_KOREAN);
-
-        assertThat(koreanTelegramHandler.isLengthOf(21)).isEqualTo(0);
+        assertThat(telegramHandler.isLengthOf(25)).isEqualTo(0);
+        assertThat(telegramHandler.isLengthOf(26)).isEqualTo(1);
+        assertThat(telegramHandler.isLengthOf(24)).isEqualTo(-1);
     }
 
     @Test
-    void 전문길이_비교_한글_UTF8() {
-        TelegramHandler koreanTelegramHandler = new TelegramHandler(TEST_TELEGRAM_WITH_KOREAN);
+    void 전문길이_비교_EUCKR() {
+        TelegramHandler telegramHandler = new TelegramHandler(TEST_TELEGRAM_WITH_KOREAN, Charset.forName("EUC-KR"));
 
-        assertThat(koreanTelegramHandler.isLengthOf(21)).isEqualTo(0);
-        assertThat(koreanTelegramHandler.isLengthOf(22)).isEqualTo(1);
-        assertThat(koreanTelegramHandler.isLengthOf(20)).isEqualTo(-1);
-    }
-
-    @Test
-    void 전문길이_비교_한글_EUCKR() {
-        TelegramHandler koreanTelegramHandler = new TelegramHandler(TEST_TELEGRAM_WITH_KOREAN, Charset.forName("EUC-KR"));
-
-        assertThat(koreanTelegramHandler.isLengthOf(19)).isEqualTo(0);
-        assertThat(koreanTelegramHandler.isLengthOf(20)).isEqualTo(1);
-        assertThat(koreanTelegramHandler.isLengthOf(18)).isEqualTo(-1);
+        assertThat(telegramHandler.isLengthOf(23)).isEqualTo(0);
+        assertThat(telegramHandler.isLengthOf(24)).isEqualTo(1);
+        assertThat(telegramHandler.isLengthOf(22)).isEqualTo(-1);
     }
 
     @Test
@@ -56,29 +42,31 @@ class TelegramHandlerTest {
         assertThat(telegramHandler.field(1, 1)).isEqualTo("1");
         assertThat(telegramHandler.field(6, 6)).isEqualTo("t");
         assertThat(telegramHandler.field(16, 21)).isEqualTo("한글");
+        assertThat(telegramHandler.field(23, 25)).isEqualTo("321");
     }
 
     @Test
     void 특정필드_가져오기_EUCKR() {
-        TelegramHandler koreanTelegramHandler = new TelegramHandler(TEST_TELEGRAM_WITH_KOREAN, Charset.forName("EUC-KR"));
+        TelegramHandler telegramHandler = new TelegramHandler(TEST_TELEGRAM_WITH_KOREAN, Charset.forName("EUC-KR"));
 
-        assertThat(koreanTelegramHandler.field(1, 5)).isEqualTo("12345");
-        assertThat(koreanTelegramHandler.field(6, 13)).isEqualTo("testname");
-        assertThat(koreanTelegramHandler.field(1, 1)).isEqualTo("1");
-        assertThat(koreanTelegramHandler.field(6, 6)).isEqualTo("t");
-        assertThat(koreanTelegramHandler.field(16, 19)).isEqualTo("한글");
+        assertThat(telegramHandler.field(1, 5)).isEqualTo("12345");
+        assertThat(telegramHandler.field(6, 13)).isEqualTo("testname");
+        assertThat(telegramHandler.field(1, 1)).isEqualTo("1");
+        assertThat(telegramHandler.field(6, 6)).isEqualTo("t");
+        assertThat(telegramHandler.field(16, 19)).isEqualTo("한글");
+        assertThat(telegramHandler.field(21, 23)).isEqualTo("321");
     }
 
     @Test
     void 특정필드_가져올때_전문길이_예외() {
         TelegramHandler telegramHandler = new TelegramHandler(TEST_TELEGRAM_WITH_KOREAN);
 
-        assertThatThrownBy(() -> telegramHandler.field(6, 22)).isInstanceOf(RuntimeException.class)
-            .hasMessage("endIndex가 전문길이보다 큽니다. telegram length: 21, bedinIndex: 6, endIndex: 22");
-        assertThatThrownBy(() -> telegramHandler.field(0, 22)).isInstanceOf(RuntimeException.class)
-            .hasMessage("beginIndex는 0보다 커야합니다. telegram length: 21, bedinIndex: 0, endIndex: 22");
+        assertThatThrownBy(() -> telegramHandler.field(6, 26)).isInstanceOf(RuntimeException.class)
+            .hasMessage("endIndex가 전문길이보다 큽니다. telegram length: 25, bedinIndex: 6, endIndex: 26");
+        assertThatThrownBy(() -> telegramHandler.field(0, 25)).isInstanceOf(RuntimeException.class)
+            .hasMessage("beginIndex는 0보다 커야합니다. telegram length: 25, bedinIndex: 0, endIndex: 25");
         assertThatThrownBy(() -> telegramHandler.field(2, 1)).isInstanceOf(RuntimeException.class)
-            .hasMessage("endIndex는 beginIndex보다 커야합니다. telegram length: 21, bedinIndex: 2, endIndex: 1");
+            .hasMessage("endIndex는 beginIndex보다 커야합니다. telegram length: 25, bedinIndex: 2, endIndex: 1");
     }
 
     @Test
