@@ -12,6 +12,10 @@ public class TelegramHandler {
             throw new RuntimeException("beginIndex는 0보다 커야합니다. telegram length: " + telegram.length() + ", bedinIndex: " + beginIndex + ", endIndex: " + endIndex);
         }
 
+        if (endIndex > telegram.length()) {
+            throw new RuntimeException("endIndex가 전문길이보다 큽니다. telegram length: " + telegram.length() + ", bedinIndex: " + beginIndex + ", endIndex: " + endIndex);
+        }
+
         try {
             return telegram.substring(beginIndex - 1, endIndex);
         } catch (StringIndexOutOfBoundsException e) {
