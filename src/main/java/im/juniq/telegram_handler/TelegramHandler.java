@@ -22,22 +22,33 @@ public class TelegramHandler {
     }
 
     public String field(int beginIndex, int endIndex) {
-        if (beginIndex < 1) {
-            throw new RuntimeException("beginIndex는 0보다 커야합니다. telegram length: " + telegram.length + ", bedinIndex: " + beginIndex + ", endIndex: " + endIndex);
-        }
+        validIndex(beginIndex, endIndex);
+        return extractField(beginIndex, endIndex);
+    }
 
-        if (endIndex > telegram.length) {
-            throw new RuntimeException("endIndex가 전문길이보다 큽니다. telegram length: " + telegram.length + ", bedinIndex: " + beginIndex + ", endIndex: " + endIndex);
-        }
-
-        if (beginIndex > endIndex) {
-            throw new RuntimeException("endIndex는 beginIndex보다 커야합니다. telegram length: " + telegram.length + ", bedinIndex: " + beginIndex + ", endIndex: " + endIndex);
-        }
-
+    private String extractField(int beginIndex, int endIndex) {
         try {
             return new String(extractByte(beginIndex, endIndex), charset);
         } catch (StringIndexOutOfBoundsException e) {
-            throw new RuntimeException("전문길이와 index가 맞지 않습니다. telegram length: " + telegram.length + ", bedinIndex: " + beginIndex + ", endIndex: " + endIndex);
+            throw new RuntimeException("전문길이와 index가 맞지 않습니다. telegram length: " + telegram.length + ", bedinIndex: " + beginIndex
+                + ", endIndex: " + endIndex);
+        }
+    }
+
+    private void validIndex(int beginIndex, int endIndex) {
+        if (beginIndex < 1) {
+            throw new RuntimeException("beginIndex는 0보다 커야합니다. telegram length: " + telegram.length + ", bedinIndex: " + beginIndex
+                + ", endIndex: " + endIndex);
+        }
+
+        if (endIndex > telegram.length) {
+            throw new RuntimeException("endIndex가 전문길이보다 큽니다. telegram length: " + telegram.length + ", bedinIndex: " + beginIndex
+                + ", endIndex: " + endIndex);
+        }
+
+        if (beginIndex > endIndex) {
+            throw new RuntimeException("endIndex는 beginIndex보다 커야합니다. telegram length: " + telegram.length + ", bedinIndex: " + beginIndex
+                + ", endIndex: " + endIndex);
         }
     }
 
