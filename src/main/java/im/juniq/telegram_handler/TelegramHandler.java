@@ -71,4 +71,8 @@ public class TelegramHandler {
         byte[] field = newField.getBytes(charset);
         System.arraycopy(field, 0, telegram, beginIndex - 1, endIndex - beginIndex + 1);
     }
+
+    public long longField(int beginIndex, int endIndex) {
+        return PositiveNumber.ofLeftPadZero(field(beginIndex, endIndex)).longValue();
+    }
 }
