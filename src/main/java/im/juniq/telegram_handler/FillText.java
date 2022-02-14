@@ -3,52 +3,52 @@ package im.juniq.telegram_handler;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 
-public class Text {
+public class FillText {
     private final byte[] text;
     private final Charset charset;
 
-    private Text(byte[] text, Charset charset) {
+    private FillText(byte[] text, Charset charset) {
         this.text = text;
         this.charset = charset;
     }
 
-    public static Text ofRightPad(String text, int length) {
+    public static FillText ofRightPad(String text, int length) {
         return ofRightPad(text, length, StandardCharsets.UTF_8);
     }
 
-    public static Text ofLeftPad(String text, int length) {
+    public static FillText ofLeftPad(String text, int length) {
         return ofLeftPad(text, length, StandardCharsets.UTF_8);
     }
 
-    public static Text ofRightPad(String text, int length, Charset charset) {
+    public static FillText ofRightPad(String text, int length, Charset charset) {
         byte[] byteText = text.getBytes(charset);
         int padLength = length - byteText.length;
         if (padLength < 0) {
             throw new RuntimeException("문자열 바이트의 길이가 length 보다 큽니다. text: " + text + ", length: " + length);
         }
-        return new Text((text + makePad(padLength, " ")).getBytes(charset), charset);
+        return new FillText((text + makePad(padLength, " ")).getBytes(charset), charset);
     }
 
-    public static Text ofLeftPad(String text, int length, Charset charset) {
+    public static FillText ofLeftPad(String text, int length, Charset charset) {
         byte[] byteText = text.getBytes(charset);
         int padLength = length - byteText.length;
         if (padLength < 0) {
             throw new RuntimeException("문자열 바이트의 길이가 length 보다 큽니다. text: " + text + ", length: " + length);
         }
-        return new Text((makePad(padLength, " ") + text).getBytes(charset), charset);
+        return new FillText((makePad(padLength, " ") + text).getBytes(charset), charset);
     }
 
-    public static Text ofZeroPad(String text, int length) {
+    public static FillText ofZeroPad(String text, int length) {
         return ofZeroPad(text, length, StandardCharsets.UTF_8);
     }
 
-    public static Text ofZeroPad(String text, int length, Charset charset) {
+    public static FillText ofZeroPad(String text, int length, Charset charset) {
         byte[] byteText = text.getBytes(charset);
         int padLength = length - byteText.length;
         if (padLength < 0) {
             throw new RuntimeException("문자열 바이트의 길이가 length 보다 큽니다. text: " + text + ", length: " + length);
         }
-        return new Text((makePad(padLength, "0") + text).getBytes(charset), charset);
+        return new FillText((makePad(padLength, "0") + text).getBytes(charset), charset);
     }
 
     private static String makePad(int length, String padding) {
