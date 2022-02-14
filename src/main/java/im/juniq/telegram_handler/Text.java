@@ -26,7 +26,7 @@ public class Text {
         if (padLength < 0) {
             throw new RuntimeException("문자열 바이트의 길이가 length 보다 큽니다. text: " + text + ", length: " + length);
         }
-        return new Text((text + makePad(padLength)).getBytes(charset), charset);
+        return new Text((text + makePad(padLength, " ")).getBytes(charset), charset);
     }
 
     public static Text ofLeftPad(String text, int length, Charset charset) {
@@ -35,11 +35,24 @@ public class Text {
         if (padLength < 0) {
             throw new RuntimeException("문자열 바이트의 길이가 length 보다 큽니다. text: " + text + ", length: " + length);
         }
-        return new Text((makePad(padLength) + text).getBytes(charset), charset);
+        return new Text((makePad(padLength, " ") + text).getBytes(charset), charset);
     }
 
-    private static String makePad(int length) {
-        return " ".repeat(length);
+    public static Text ofZeroPad(String text, int length) {
+        return ofZeroPad(text, length, StandardCharsets.UTF_8);
+    }
+
+    public static Text ofZeroPad(String text, int length, Charset charset) {
+        byte[] byteText = text.getBytes(charset);
+        int padLength = length - byteText.length;
+        if (padLength < 0) {
+            throw new RuntimeException("문자열 바이트의 길이가 length 보다 큽니다. text: " + text + ", length: " + length);
+        }
+        return new Text((makePad(padLength, "0") + text).getBytes(charset), charset);
+    }
+
+    private static String makePad(int length, String padding) {
+        return padding.repeat(length);
     }
 
     public byte[] value() {
