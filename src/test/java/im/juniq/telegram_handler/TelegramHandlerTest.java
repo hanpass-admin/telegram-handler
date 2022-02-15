@@ -5,8 +5,6 @@ import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
-
 import org.junit.jupiter.api.Test;
 
 class TelegramHandlerTest {
@@ -40,11 +38,11 @@ class TelegramHandlerTest {
         TelegramHandler telegramHandler = new TelegramHandler(TEST_TELEGRAM_WITH_KOREAN);
 
         assertThat(telegramHandler.field(1, 5)).isEqualTo("12345");
-        assertThat(telegramHandler.field(6, 13)).isEqualTo("testname");
+        assertThat(telegramHandler.field(6, 8)).isEqualTo("testname");
         assertThat(telegramHandler.field(1, 1)).isEqualTo("1");
-        assertThat(telegramHandler.field(6, 6)).isEqualTo("t");
-        assertThat(telegramHandler.field(16, 21)).isEqualTo("한글");
-        assertThat(telegramHandler.field(23, 25)).isEqualTo("321");
+        assertThat(telegramHandler.field(6, 1)).isEqualTo("t");
+        assertThat(telegramHandler.field(16, 6)).isEqualTo("한글");
+        assertThat(telegramHandler.field(23, 3)).isEqualTo("321");
     }
 
     @Test
@@ -52,30 +50,30 @@ class TelegramHandlerTest {
         TelegramHandler telegramHandler = new TelegramHandler(TEST_TELEGRAM_WITH_KOREAN, Charset.forName("EUC-KR"));
 
         assertThat(telegramHandler.field(1, 5)).isEqualTo("12345");
-        assertThat(telegramHandler.field(6, 13)).isEqualTo("testname");
+        assertThat(telegramHandler.field(6, 8)).isEqualTo("testname");
         assertThat(telegramHandler.field(1, 1)).isEqualTo("1");
-        assertThat(telegramHandler.field(6, 6)).isEqualTo("t");
-        assertThat(telegramHandler.field(16, 19)).isEqualTo("한글");
-        assertThat(telegramHandler.field(21, 23)).isEqualTo("321");
+        assertThat(telegramHandler.field(6, 1)).isEqualTo("t");
+        assertThat(telegramHandler.field(16, 4)).isEqualTo("한글");
+        assertThat(telegramHandler.field(21, 3)).isEqualTo("321");
     }
 
     @Test
     void 특정필드_숫자로_가져오기() {
         TelegramHandler telegramHandler = new TelegramHandler(TEST_TELEGRAM_WITH_KOREAN);
 
-        assertThat(telegramHandler.longField(31, 40)).isEqualTo(25500L);
+        assertThat(telegramHandler.longField(31, 10)).isEqualTo(25500L);
     }
 
     @Test
     void 특정필드_가져올때_전문길이_예외() {
         TelegramHandler telegramHandler = new TelegramHandler(TEST_TELEGRAM_WITH_KOREAN);
 
-        assertThatThrownBy(() -> telegramHandler.field(6, 51)).isInstanceOf(RuntimeException.class)
-            .hasMessage("endIndex가 전문길이보다 큽니다. telegram length: 50, bedinIndex: 6, endIndex: 51");
-        assertThatThrownBy(() -> telegramHandler.field(0, 25)).isInstanceOf(RuntimeException.class)
-            .hasMessage("beginIndex는 0보다 커야합니다. telegram length: 50, bedinIndex: 0, endIndex: 25");
-        assertThatThrownBy(() -> telegramHandler.field(2, 1)).isInstanceOf(RuntimeException.class)
-            .hasMessage("endIndex는 beginIndex보다 커야합니다. telegram length: 50, bedinIndex: 2, endIndex: 1");
+        assertThatThrownBy(() -> telegramHandler.field(0, 5)).isInstanceOf(RuntimeException.class)
+            .hasMessage("beginIndex는 0보다 커야합니다. telegram length: 50, bedinIndex: 0, fieldLength: 5");
+        assertThatThrownBy(() -> telegramHandler.field(2, 0)).isInstanceOf(RuntimeException.class)
+            .hasMessage("fieldLength는 0보다 커야합니다. telegram length: 50, bedinIndex: 2, fieldLength: 0");
+        assertThatThrownBy(() -> telegramHandler.field(40, 51)).isInstanceOf(RuntimeException.class)
+            .hasMessage("가져올 field의 index가 전문 길이보다 큽니다. telegram length: 50, bedinIndex: 40, fieldLength: 51");
     }
 
     @Test
@@ -85,17 +83,17 @@ class TelegramHandlerTest {
         telegramHandler.changeField(1, 5, "54321");
 
         assertThat(telegramHandler.field(1, 5)).isEqualTo("54321");
-        assertThat(telegramHandler.field(6, 13)).isEqualTo("testname");
+        assertThat(telegramHandler.field(6, 8)).isEqualTo("testname");
     }
 
     @Test
     void 특정필드_값_바꾸기2() {
         TelegramHandler telegramHandler = new TelegramHandler(TEST_TELEGRAM_WITH_KOREAN);
 
-        telegramHandler.changeField(6, 9, "eeee");
+        telegramHandler.changeField(6, 4, "eeee");
 
         assertThat(telegramHandler.field(1, 5)).isEqualTo("12345");
-        assertThat(telegramHandler.field(6, 13)).isEqualTo("eeeename");
+        assertThat(telegramHandler.field(6, 8)).isEqualTo("eeeename");
     }
 
     @Test
