@@ -17,4 +17,4 @@ telegramHandler.field(1, 5); // "22"
 telegramHandler.telegram(); // "22     testname     " <- byte[]
 ```
 자세한 사용법은
-TelegramHandlerTest 클래스 참조.
+[TelegramHandlerTest](https://github.com/juniqlim/telegram-handler/blob/master/src/test/java/im/juniq/telegram_handler/TelegramHandlerTest.java) 클래스 참조.
