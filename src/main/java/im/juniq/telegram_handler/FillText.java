@@ -55,7 +55,11 @@ public class FillText {
     }
 
     private static String makePad(int length, String padding) {
-        return padding.repeat(length);
+        StringBuilder result = new StringBuilder();
+        for (int i = 0; i < length; i++) {
+            result.append(padding);
+        }
+        return result.toString();
     }
 
     public byte[] value() {
