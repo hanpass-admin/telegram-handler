@@ -58,13 +58,6 @@ class TelegramHandlerTest {
     }
 
     @Test
-    void 특정필드_숫자로_가져오기() {
-        TelegramHandler telegramHandler = new TelegramHandler(TEST_TELEGRAM_WITH_KOREAN);
-
-        assertThat(telegramHandler.longField(31, 10)).isEqualTo(25500L);
-    }
-
-    @Test
     void 특정필드_가져올때_전문길이_예외() {
         TelegramHandler telegramHandler = new TelegramHandler(TEST_TELEGRAM_WITH_KOREAN);
 
@@ -87,13 +80,28 @@ class TelegramHandlerTest {
     }
 
     @Test
-    void 특정필드_값_바꾸기2() {
+    void 모자란부분은_스페이스로_채워서_특정필드_값_바꾸기() {
         TelegramHandler telegramHandler = new TelegramHandler(TEST_TELEGRAM_WITH_KOREAN);
 
-        telegramHandler.changeField(6, 4, "eeee");
+        telegramHandler.changeFieldAndFill(1, 5, "eee");
 
-        assertThat(telegramHandler.field(1, 5)).isEqualTo("12345");
-        assertThat(telegramHandler.field(6, 8)).isEqualTo("eeeename");
+        assertThat(telegramHandler.fieldAndTrim(1, 5)).isEqualTo("eee");
+    }
+
+    @Test
+    void 특정필드_숫자로_가져오기() {
+        TelegramHandler telegramHandler = new TelegramHandler(TEST_TELEGRAM_WITH_KOREAN);
+
+        assertThat(telegramHandler.longField(31, 10)).isEqualTo(25500L);
+    }
+
+    @Test
+    void 모자란부분은_0으로_채워서_숫자로_특정필드_값_바꾸기() {
+        TelegramHandler telegramHandler = new TelegramHandler(TEST_TELEGRAM_WITH_KOREAN);
+
+        telegramHandler.changeNumberField(31, 10, "77000");
+
+        assertThat(telegramHandler.longField(31, 10)).isEqualTo(77000L);
     }
 
     @Test

@@ -26,6 +26,10 @@ public class TelegramHandler {
         return extractField(beginIndex, fieldLength);
     }
 
+    public String fieldAndTrim(int beginIndex, int fieldLength) {
+        return field(beginIndex, fieldLength).trim();
+    }
+
     private String extractField(int beginIndex, int fieldLength) {
         try {
             return new String(extractByte(beginIndex, fieldLength), charset);
@@ -68,6 +72,33 @@ public class TelegramHandler {
         }
 
         byte[] field = newField.getBytes(charset);
+        System.arraycopy(field, 0, telegram, beginIndex - 1, fieldLength);
+    }
+
+    public void changeFieldAndFill(int beginIndex, int fieldLength, String newField) {
+        if (fieldLength < newField.length()) {
+            throw new RuntimeException("새로운 필드의 길이는 이전 필드의 길이보다 작아야 합니다.");
+        }
+
+        byte[] field = FillText.ofRightPad(newField, fieldLength, charset).value();
+        System.arraycopy(field, 0, telegram, beginIndex - 1, fieldLength);
+    }
+
+    public void changeFieldAndLeftFill(int beginIndex, int fieldLength, String newField) {
+        if (fieldLength < newField.length()) {
+            throw new RuntimeException("새로운 필드의 길이는 이전 필드의 길이보다 작아야 합니다.");
+        }
+
+        byte[] field = FillText.ofLeftPad(newField, fieldLength, charset).value();
+        System.arraycopy(field, 0, telegram, beginIndex - 1, fieldLength);
+    }
+
+    public void changeNumberField(int beginIndex, int fieldLength, String newField) {
+        if (fieldLength < newField.length()) {
+            throw new RuntimeException("새로운 필드의 길이는 이전 필드의 길이보다 작아야 합니다.");
+        }
+
+        byte[] field = FillText.ofZeroPad(newField, fieldLength, charset).value();
         System.arraycopy(field, 0, telegram, beginIndex - 1, fieldLength);
     }
 
