@@ -5,6 +5,7 @@
 
 의 기능을 하는 모듈.
 
+전체 전문에 대한 스팩정의를 요구하지 않으며, 필요한 부분만 읽고, 필요한 부분만 수정하여 사용할 수 있습니다.(cherry picking) 
 ## 사용법
 ```java
 TelegramHandler telegramHandler = new TelegramHandler("12345  testname     ");
