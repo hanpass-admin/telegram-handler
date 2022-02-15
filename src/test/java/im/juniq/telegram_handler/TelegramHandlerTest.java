@@ -85,7 +85,7 @@ class TelegramHandlerTest {
 
         telegramHandler.changeFieldAndFill(1, 5, "eee");
 
-        assertThat(telegramHandler.fieldAndTrim(1, 5)).isEqualTo("eee");
+        assertThat(telegramHandler.field(1, 5)).isEqualTo("eee");
     }
 
     @Test

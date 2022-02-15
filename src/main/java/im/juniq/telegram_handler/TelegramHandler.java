@@ -21,13 +21,13 @@ public class TelegramHandler {
         this.telegram = telegram;
     }
 
-    public String field(int beginIndex, int fieldLength) {
+    public String originField(int beginIndex, int fieldLength) {
         validIndex(beginIndex, fieldLength);
         return extractField(beginIndex, fieldLength);
     }
 
-    public String fieldAndTrim(int beginIndex, int fieldLength) {
-        return field(beginIndex, fieldLength).trim();
+    public String field(int beginIndex, int fieldLength) {
+        return originField(beginIndex, fieldLength).trim();
     }
 
     private String extractField(int beginIndex, int fieldLength) {
