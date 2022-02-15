@@ -121,4 +121,11 @@ class TelegramHandlerTest {
         assertThat(telegramHandler.isLengthOf(49)).isEqualTo(1);
         assertThat(telegramHandler.isLengthOf(47)).isEqualTo(-1);
     }
+
+    @Test
+    void 전체_전문_가져오기() {
+        TelegramHandler telegramHandler = new TelegramHandler(TEST_TELEGRAM_WITH_KOREAN);
+
+        assertThat(new String(telegramHandler.telegram())).isEqualTo(TEST_TELEGRAM_WITH_KOREAN);
+    }
 }

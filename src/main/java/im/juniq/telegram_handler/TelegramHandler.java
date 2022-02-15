@@ -94,4 +94,8 @@ public class TelegramHandler {
     public long longField(int beginIndex, int fieldLength) {
         return PositiveNumber.ofLeftPadZero(field(beginIndex, fieldLength)).longValue();
     }
+
+    public byte[] telegram() {
+        return telegram;
+    }
 }
