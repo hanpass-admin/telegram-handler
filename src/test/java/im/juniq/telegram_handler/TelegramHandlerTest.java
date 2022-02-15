@@ -83,7 +83,7 @@ class TelegramHandlerTest {
     void 모자란부분은_스페이스로_채워서_특정필드_값_바꾸기() {
         TelegramHandler telegramHandler = new TelegramHandler(TEST_TELEGRAM_WITH_KOREAN);
 
-        telegramHandler.changeFieldAndFill(1, 5, "eee");
+        telegramHandler.changeField(1, 5, "eee");
 
         assertThat(telegramHandler.field(1, 5)).isEqualTo("eee");
     }
@@ -108,7 +108,7 @@ class TelegramHandlerTest {
     void 특정필드_값_바꾸기_필드길이_예외() {
         TelegramHandler telegramHandler = new TelegramHandler(TEST_TELEGRAM_WITH_KOREAN);
 
-        assertThatThrownBy(() -> telegramHandler.changeField(1, 5, "5432")).isInstanceOf(RuntimeException.class)
-            .hasMessage("새로운 필드의 길이는 이전 필드의 길이와 같아야 합니다.");
+        assertThatThrownBy(() -> telegramHandler.changeField(1, 3, "5432")).isInstanceOf(RuntimeException.class)
+            .hasMessage("새로운 필드의 길이는 이전 필드의 길이보다 작아야 합니다.");
     }
 }

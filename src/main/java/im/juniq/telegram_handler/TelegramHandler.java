@@ -67,15 +67,6 @@ public class TelegramHandler {
     }
 
     public void changeField(int beginIndex, int fieldLength, String newField) {
-        if (fieldLength != newField.length()) {
-            throw new RuntimeException("새로운 필드의 길이는 이전 필드의 길이와 같아야 합니다.");
-        }
-
-        byte[] field = newField.getBytes(charset);
-        System.arraycopy(field, 0, telegram, beginIndex - 1, fieldLength);
-    }
-
-    public void changeFieldAndFill(int beginIndex, int fieldLength, String newField) {
         if (fieldLength < newField.length()) {
             throw new RuntimeException("새로운 필드의 길이는 이전 필드의 길이보다 작아야 합니다.");
         }
