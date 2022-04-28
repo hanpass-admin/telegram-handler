@@ -90,7 +90,7 @@ class TelegramHandlerTest {
     void 모자란부분은_0으로_채워서_숫자로_특정필드_값_바꾸기() {
         TelegramHandler telegramHandler = new TelegramHandler(TEST_TELEGRAM_WITH_KOREAN);
 
-        telegramHandler.changeField(31, 10, 77000);
+        telegramHandler.changeNumberField(31, 10, "77000");
 
         assertThat(telegramHandler.longField(31, 10)).isEqualTo(77000L);
         assertThat(telegramHandler.originField(31, 10)).isEqualTo("0000077000");
@@ -127,5 +127,12 @@ class TelegramHandlerTest {
         TelegramHandler telegramHandler = new TelegramHandler(TEST_TELEGRAM_WITH_KOREAN);
 
         assertThat(new String(telegramHandler.telegram())).isEqualTo(TEST_TELEGRAM_WITH_KOREAN);
+    }
+
+    @Test
+    void 특정바이트_가져오기() {
+        TelegramHandler telegramHandler = new TelegramHandler(TEST_TELEGRAM_WITH_KOREAN);
+
+        assertThat(new String(telegramHandler.byteField(1, 1))).isEqualTo("1");
     }
 }

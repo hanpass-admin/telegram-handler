@@ -1,6 +1,5 @@
 package im.juniq.telegram_handler;
 
-import java.math.BigDecimal;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 
@@ -29,6 +28,10 @@ public class TelegramHandler {
 
     public String field(int beginIndex, int fieldLength) {
         return originField(beginIndex, fieldLength).trim();
+    }
+
+    public byte[] byteField(int beginIndex, int fieldLength) {
+        return extractByte(beginIndex, fieldLength);
     }
 
     private String extractField(int beginIndex, int fieldLength) {
@@ -77,12 +80,7 @@ public class TelegramHandler {
         changePartOfTelegram(beginIndex, fieldLength, Field.ofLeftPad(newField, fieldLength, charset).value());
     }
 
-    public void changeField(int beginIndex, int fieldLength, int number) {
-        changeField(beginIndex, fieldLength, (long) number);
-    }
-
-    public void changeField(int beginIndex, int fieldLength, long number) {
-        String newField = String.valueOf(number);
+    public void changeNumberField(int beginIndex, int fieldLength, String newField) {
         validFieldLength(fieldLength, newField);
         changePartOfTelegram(beginIndex, fieldLength, Field.ofZeroPad(newField, fieldLength, charset).value());
     }
